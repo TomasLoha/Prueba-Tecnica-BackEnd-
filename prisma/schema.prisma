@@ -1,0 +1,56 @@
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id              Int       @id @default(autoincrement())
+    disponible      Boolean
+    fechaNacimiento DateTime
+    dni             String    @unique
+    nombreCompleto  String
+    sexo            String
+    estadoCivil     String
+    deletedAt       DateTime?
+    facturas        Factura[]
+}
+
+model Factura {
+    id             Int              @id @default(autoincrement())
+    disponible     Boolean
+    fecha          DateTime
+    total          Float
+    nombreFantasia String
+    fechaFundacion String
+    usuarioId      Int
+    deletedAt      DateTime?
+    usuario        User             @relation(fields: [usuarioId], references: [id])
+    detalleFactura detalleFactura[]
+}
+
+model detalleFactura {
+    id         Int     @id @default(autoincrement())
+    disponible Boolean
+    subtotal   Float
+    cantidad   Int
+    productoId Int
+    facturaId  Int
+    factura    Factura @relation(fields: [facturaId], references: [id])
+    producto   Product @relation(fields: [productoId], references: [id])
+}
+
+model Product {
+    id             Int              @id @default(autoincrement())
+    disponible     Boolean
+    nombre         String
+    precioUnitario Float
+    descripcion    String
+    stock          Int
+    deletedAt      DateTime?
+    detalleFactura detalleFactura[]
+}
