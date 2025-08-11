@@ -56,6 +56,5 @@ export class CreateProductoDto {
 	@Type(() => CreateDetallesFacturaDto)
 	detalleFactura?: {
 		create?: CreateDetallesFacturaDto[];
-		connect?: { id: number }[];
 	};
 }

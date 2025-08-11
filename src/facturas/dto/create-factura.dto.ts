@@ -46,10 +46,6 @@ export class CreateFacturaDto {
 				type: 'array',
 				items: { $ref: '#/components/schemas/CreateDetallesFacturaDto' },
 			},
-			connect: {
-				type: 'array',
-				items: { type: 'object', properties: { id: { type: 'number' } } },
-			},
 		},
 	})
 	@IsOptional()
@@ -57,6 +53,5 @@ export class CreateFacturaDto {
 	@Type(() => CreateDetallesFacturaDto)
 	detalleFactura?: {
 		create?: CreateDetallesFacturaDto[];
-		connect?: { id: number }[];
 	};
 }

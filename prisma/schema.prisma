@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-    id              Int       @id @default(autoincrement())
+    id              String    @id @default(uuid())
     disponible      Boolean
     fechaNacimiento DateTime
     dni             String    @unique
@@ -21,31 +21,31 @@ model User {
 }
 
 model Factura {
-    id             Int              @id @default(autoincrement())
+    id             String           @id @default(uuid())
     disponible     Boolean
     fecha          DateTime
     total          Float
     nombreFantasia String
     fechaFundacion String
-    usuarioId      Int
+    usuarioId      String
     deletedAt      DateTime?
     usuario        User             @relation(fields: [usuarioId], references: [id])
     detalleFactura detalleFactura[]
 }
 
 model detalleFactura {
-    id         Int     @id @default(autoincrement())
+    id         String  @id @default(uuid())
     disponible Boolean
     subtotal   Float
     cantidad   Int
-    productoId Int
-    facturaId  Int
+    productoId String
+    facturaId  String
     factura    Factura @relation(fields: [facturaId], references: [id])
     producto   Product @relation(fields: [productoId], references: [id])
 }
 
 model Product {
-    id             Int              @id @default(autoincrement())
+    id             String           @id @default(uuid())
     disponible     Boolean
     nombre         String
     precioUnitario Float
