@@ -18,7 +18,7 @@ async function bootstrap() {
 		.setVersion('1.0')
 		.addTag('Facturas')
 		.addTag('Productos')
-		.addTag('DetallesFactura')
+		.addTag('DetallesFacturas')
 		.addTag('Users')
 		.build();
 	const document = SwaggerModule.createDocument(app, config);

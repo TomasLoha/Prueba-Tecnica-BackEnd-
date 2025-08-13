@@ -15,19 +15,29 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
-	@Post()
-	create(@Body() createUserDto: CreateUserDto) {
-		return this.usersService.create(createUserDto);
-	}
-
 	@Get()
 	findAll() {
 		return this.usersService.findAll();
 	}
 
+	@Get('/disponibles')
+	findAvailable() {
+		return this.usersService.findAvailable();
+	}
+
 	@Get(':id')
 	findOne(@Param('id') id: string) {
 		return this.usersService.findOne(id);
+	}
+
+	@Get('paginate/:page/:limit')
+	paginate(@Param('page') page: number, @Param('limit') limit: number) {
+		return this.usersService.paginate({ page, limit });
+	}
+
+	@Post()
+	create(@Body() createUserDto: CreateUserDto) {
+		return this.usersService.create(createUserDto);
 	}
 
 	@Patch(':id')
@@ -38,12 +48,5 @@ export class UsersController {
 	@Delete(':id')
 	remove(@Param('id') id: string) {
 		return this.usersService.remove(id);
-	}
-	@Get('paginate')
-	paginate(
-		@Param('page') page: number = 1,
-		@Param('limit') limit: number = 10,
-	) {
-		return this.usersService.paginate({ page, limit });
 	}
 }

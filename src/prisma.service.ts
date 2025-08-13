@@ -31,10 +31,15 @@ export class PrismaService
 			if (params.action === 'update' && params.args?.data) {
 				const data = params.args.data;
 
-				// Si disponible es true, se considera "no borrado", así que se borra la fecha.
-				if ('disponible' in data && data.disponible === true) {
+				if (
+					'deleteAt' in data &&
+					'deleteAt' != null &&
+					'disponible' in data &&
+					data.disponible === true
+				) {
 					data.deletedAt = null;
 				}
+
 				// Si disponible es false y la fecha de borrado no está explícitamente definida,
 				// se crea una nueva fecha de borrado.
 				else if ('disponible' in data && data.disponible === false) {
