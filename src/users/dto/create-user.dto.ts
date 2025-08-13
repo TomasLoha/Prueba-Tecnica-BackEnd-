@@ -1,46 +1,60 @@
-import { Type } from 'class-transformer';
 import {
 	IsBoolean,
-	IsDateString,
-	IsNumber,
+	IsDate,
 	IsOptional,
-	isString,
 	IsString,
 	Length,
-	MaxLength,
-	ValidateNested,
 } from 'class-validator';
-import { connect } from 'http2';
-import { CreateFacturaDto } from 'src/facturas/dto/create-factura.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class CreateUserDto {
+	@ApiProperty({
+		description: 'Indica si el usuario está disponible',
+		example: true,
+	})
 	@IsBoolean()
 	disponible: boolean;
 
-	@IsDateString()
-	fechaNacimiento: string; // Use string for ISO date representation
+	@ApiProperty({
+		description: 'Fecha de nacimiento del usuario',
+		example: '1990-01-01T00:00:00.000Z',
+		type: String,
+	})
+	@Type(() => Date)
+	@IsDate()
+	fechaNacimiento: Date;
 
+	@ApiProperty({
+		description: 'DNI del usuario (8 caracteres)',
+		example: '12345678',
+	})
 	@IsString()
 	@Length(8, 8)
 	dni: string;
 
+	@ApiProperty({
+		description: 'Nombre completo del usuario',
+		example: 'Juan Pérez',
+	})
 	@IsString()
-	@MaxLength(100)
 	nombreCompleto: string;
 
+	@ApiProperty({ description: 'Sexo del usuario', example: 'Masculino' })
 	@IsString()
-	@MaxLength(10)
 	sexo: string;
 
+	@ApiProperty({ description: 'Estado civil del usuario', example: 'Soltero' })
 	@IsString()
-	@MaxLength(20)
 	estadoCivil: string;
 
+	@ApiPropertyOptional({
+		description: 'Fecha de eliminación del usuario',
+		example: '2024-01-01T00:00:00.000Z',
+		type: String,
+	})
 	@IsOptional()
-	@ValidateNested({ each: true })
-	@Type(() => CreateFacturaDto)
-	facturas?: {
-		create?: CreateFacturaDto[];
-		connect?: { id: number }[];
-	};
+	@Type(() => Date)
+	@IsDate()
+	deletedAt?: Date;
 }
