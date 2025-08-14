@@ -34,7 +34,7 @@ export class DetallesFacturasController {
 
 	@Get('paginate/:page/:limit')
 	paginate(@Param('page') page: number, @Param('limit') limit: number) {
-		return this.detallesFacturasService.paginate(page, limit);
+		return this.detallesFacturasService.paginate({ page, limit });
 	}
 
 	@Post()

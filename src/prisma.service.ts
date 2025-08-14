@@ -20,6 +20,11 @@ export class PrismaService
 
 		this.$use(async (params, next) => {
 			if (params.action === 'delete') {
+				if (params.args?.hardDelete) {
+					delete params.args.hardDelete;
+					return next(params); // Borrado real
+				}
+
 				// Borrado lógico.
 				params.action = 'update';
 				params.args['data'] = {

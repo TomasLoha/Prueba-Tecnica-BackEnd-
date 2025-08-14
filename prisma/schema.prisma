@@ -34,14 +34,15 @@ model Factura {
 }
 
 model detalleFactura {
-    id         String  @id @default(uuid())
+    id         String    @id @default(uuid())
     disponible Boolean
     subtotal   Float
     cantidad   Int
     productoId String
     facturaId  String
-    factura    Factura @relation(fields: [facturaId], references: [id])
-    producto   Product @relation(fields: [productoId], references: [id])
+    deletedAt  DateTime?
+    factura    Factura   @relation(fields: [facturaId], references: [id])
+    producto   Product   @relation(fields: [productoId], references: [id])
 }
 
 model Product {

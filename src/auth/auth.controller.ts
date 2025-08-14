@@ -5,6 +5,11 @@ import { AuthService } from './auth.service';
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
+	@Post('register')
+	register() {
+		return 'Registro seccion de autenticacion';
+	}
+
 	@Post('login')
 	login() {
 		return 'Login seccion de autenticacion';

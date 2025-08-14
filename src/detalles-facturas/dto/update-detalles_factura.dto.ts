@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateDetallesFacturaDto } from './create-detalles_factura.dto';
+import { IsBoolean, IsInt, IsOptional } from 'class-validator';
 
-export class UpdateDetallesFacturaDto extends PartialType(CreateDetallesFacturaDto) {}
+export class UpdateDetallesFacturaDto {
+	@IsOptional()
+	@IsBoolean()
+	disponible?: boolean;
+
+	@IsOptional()
+	@IsInt()
+	cantidad?: number;
+}

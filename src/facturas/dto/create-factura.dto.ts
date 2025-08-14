@@ -10,6 +10,7 @@ import {
 	IsUUID,
 	ValidateNested,
 } from 'class-validator';
+import { createDetalleFacturaFFacturaDto } from 'src/detalles-facturas/dto/create-detalle-from-factura';
 import { CreateDetallesFacturaDto } from 'src/detalles-facturas/dto/create-detalles_factura.dto';
 
 export class CreateFacturaDto {
@@ -28,12 +29,13 @@ export class CreateFacturaDto {
 	@IsDate()
 	fecha: Date;
 
-	@ApiProperty({
-		description: 'Total de la factura',
-		example: 100.0,
+	@ApiPropertyOptional({
+		description: 'Total de la factura (se calcula en el backend)',
+		example: 150.75,
 	})
+	@IsOptional()
 	@IsNumber()
-	total: number;
+	total?: number;
 
 	@ApiProperty({
 		description: 'Nombre de fantasía del cliente',
@@ -70,6 +72,6 @@ export class CreateFacturaDto {
 	})
 	@IsNotEmpty()
 	@ValidateNested({ each: true })
-	@Type(() => CreateDetallesFacturaDto)
-	detalleFactura: CreateDetallesFacturaDto[];
+	@Type(() => createDetalleFacturaFFacturaDto)
+	detalleFactura: createDetalleFacturaFFacturaDto[];
 }

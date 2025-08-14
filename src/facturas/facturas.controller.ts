@@ -35,6 +35,15 @@ export class FacturasController {
 		return this.facturasService.paginate({ page, limit });
 	}
 
+	@Get('all')
+	findAllDataFactura() {
+		return this.facturasService.findAllDataFactura();
+	}
+	@Get('all/:id')
+	findOneDataFactura(@Param('id') id: string) {
+		return this.facturasService.findOneDataFactura(id);
+	}
+
 	@Post()
 	create(@Body() createFacturaDto: CreateFacturaDto) {
 		return this.facturasService.create(createFacturaDto);

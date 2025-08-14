@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDetallesFacturaDto } from './dto/create-detalles_factura.dto';
-import { UpdateDetallesFacturaDto } from './dto/update-detalles_factura.dto';
 import { PrismaService } from 'src/prisma.service';
+import { UpdateDetallesFacturaDto } from './dto/update-detalles_factura.dto';
 
 @Injectable()
 export class DetallesFacturasService {
@@ -58,17 +58,70 @@ export class DetallesFacturasService {
 		});
 	}
 
-	update(id: string, updateDetallesFacturaDto: UpdateDetallesFacturaDto) {
-		const { facturaId, productoId, ...detalleData } = updateDetallesFacturaDto;
+	async update(id: string, data: UpdateDetallesFacturaDto) {
+		const detalle = await this.prisma.detalleFactura.findUnique({
+			where: { id },
+			include: { producto: true, factura: true },
+		});
 
-		return this.prisma.detalleFactura.update({
+		if (!detalle) {
+			throw new NotFoundException('Detalle de factura no encontrado');
+		}
+
+		let debeRecalcular = false;
+
+		// Verificar si se cambia disponible (de true a false)
+		if (
+			typeof data.disponible === 'boolean' &&
+			data.disponible !== detalle.disponible
+		) {
+			debeRecalcular = true;
+		}
+
+		// Verificar si cambia cantidad
+		if (
+			typeof data.cantidad === 'number' &&
+			data.cantidad !== detalle.cantidad
+		) {
+			debeRecalcular = true;
+		}
+
+		// Actualizar subtotal internamente si cambió cantidad
+		let nuevoSubtotal = detalle.subtotal;
+		if (typeof data.cantidad === 'number') {
+			nuevoSubtotal = detalle.producto.precioUnitario * data.cantidad;
+		}
+
+		// Actualizar detalleFactura
+		const updatedDetalle = await this.prisma.detalleFactura.update({
 			where: { id },
 			data: {
-				...detalleData,
-				factura: { connect: { id: facturaId } },
-				producto: { connect: { id: productoId } },
+				...data,
+				subtotal: nuevoSubtotal,
 			},
 		});
+
+		// Si hay que recalcular, actualizar total de la factura
+		if (debeRecalcular) {
+			const detallesFactura = await this.prisma.detalleFactura.findMany({
+				where: {
+					facturaId: detalle.facturaId,
+					disponible: true, // solo sumamos los disponibles
+				},
+			});
+
+			const nuevoTotal = detallesFactura.reduce(
+				(acc, df) => acc + df.subtotal,
+				0,
+			);
+
+			await this.prisma.factura.update({
+				where: { id: detalle.facturaId },
+				data: { total: nuevoTotal },
+			});
+		}
+
+		return updatedDetalle;
 	}
 
 	remove(id: string) {
