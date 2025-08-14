@@ -9,6 +9,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from '../../node_modules/@types/jsonwebtoken/index.d';
 
 @Injectable()
 export class AuthService {
@@ -44,6 +45,9 @@ export class AuthService {
 			throw new BadRequestException('Credenciales inválidas');
 		}
 
-		return 'User logged in successfully';
+		const payload: JwtPayload = { dni: user.dni, sub: user.id };
+		const token = this.jwtService.sign(payload);
+
+		return { access_token: token };
 	}
 }
