@@ -1,6 +1,7 @@
 import {
 	IsBoolean,
 	IsDate,
+	IsNotEmpty,
 	IsNotIn,
 	IsOptional,
 	IsString,
@@ -8,7 +9,7 @@ import {
 	ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { CreateFacturaDto } from 'src/facturas/dto/create-factura.dto';
 
 export class CreateUserDto {
@@ -18,6 +19,12 @@ export class CreateUserDto {
 	})
 	@IsBoolean()
 	disponible: boolean;
+
+	@ApiProperty()
+	@Transform(({ value }) => value.trim())
+	@IsString()
+	@IsNotEmpty()
+	password: string;
 
 	@ApiProperty({
 		description: 'Fecha de nacimiento del usuario',

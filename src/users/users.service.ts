@@ -13,6 +13,12 @@ export class UsersService {
 		return this.prisma.user.findMany();
 	}
 
+	async findByDni(dni: string) {
+		return this.prisma.user.findUnique({
+			where: { dni },
+		});
+	}
+
 	async findAvailable() {
 		return this.prisma.user.findMany({
 			where: { disponible: true },
