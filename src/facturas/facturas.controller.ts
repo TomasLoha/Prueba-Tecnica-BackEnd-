@@ -25,6 +25,14 @@ export class FacturasController {
 		return this.facturasService.findAll();
 	}
 
+	@Get('/all')
+	@UseGuards(AuthGuard)
+	@ApiBearerAuth('AuthGuard')
+	findAllDataFactura() {
+		console.log('Llamada a findAllDataFactura');
+		return this.facturasService.findAllDataFactura();
+	}
+
 	@Get('/disponibles')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth('AuthGuard')
@@ -46,12 +54,6 @@ export class FacturasController {
 		return this.facturasService.paginate({ page, limit });
 	}
 
-	@Get('all')
-	@UseGuards(AuthGuard)
-	@ApiBearerAuth('AuthGuard')
-	findAllDataFactura() {
-		return this.facturasService.findAllDataFactura();
-	}
 	@Get('all/:id')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth('AuthGuard')

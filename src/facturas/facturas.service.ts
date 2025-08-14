@@ -55,6 +55,7 @@ export class FacturasService {
 		});
 	}
 	async findAllDataFactura() {
+		console.log('Ejecutando findAllDataFactura en el servicio');
 		return await this.prisma.factura.findMany({
 			include: { detalleFactura: true },
 		});
