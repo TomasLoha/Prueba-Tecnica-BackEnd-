@@ -69,6 +69,7 @@ export class UpdateFacturaDto {
 
 	@ApiProperty({
 		description: 'Detalles de la factura',
+		type: [updateDetalleFromFacturaDto],
 	})
 	@IsNotEmpty()
 	@ValidateNested({ each: true })

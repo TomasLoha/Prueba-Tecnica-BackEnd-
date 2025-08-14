@@ -27,7 +27,7 @@ export class AuthController {
 		return this.authService.login(loginDto);
 	}
 
-	@Get('profile')
+	@Get('test')
 	@UseGuards(AuthGuard)
 	@ApiBearerAuth('AuthGuard')
 	getProfile(@Request() req) {

@@ -24,6 +24,7 @@ export class DetallesFacturasService {
 			where: { id },
 		});
 	}
+
 	async paginate(options: { page: number; limit: number }) {
 		const { page, limit } = options;
 		const skip = (page - 1) * limit;
@@ -70,7 +71,7 @@ export class DetallesFacturasService {
 
 		let debeRecalcular = false;
 
-		// Verificar si se cambia disponible (de true a false)
+		// Verifica disponible
 		if (
 			typeof data.disponible === 'boolean' &&
 			data.disponible !== detalle.disponible
@@ -86,7 +87,7 @@ export class DetallesFacturasService {
 			debeRecalcular = true;
 		}
 
-		// Actualizar subtotal internamente si cambió cantidad
+		// Actualizar subtotal internamente si cambio cantidad
 		let nuevoSubtotal = detalle.subtotal;
 		if (typeof data.cantidad === 'number') {
 			nuevoSubtotal = detalle.producto.precioUnitario * data.cantidad;
@@ -106,7 +107,7 @@ export class DetallesFacturasService {
 			const detallesFactura = await this.prisma.detalleFactura.findMany({
 				where: {
 					facturaId: detalle.facturaId,
-					disponible: true, // solo sumamos los disponibles
+					disponible: true,
 				},
 			});
 

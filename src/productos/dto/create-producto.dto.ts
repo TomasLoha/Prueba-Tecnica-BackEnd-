@@ -44,12 +44,12 @@ export class CreateProductoDto {
 	@IsNumber()
 	stock: number;
 
-	@ApiPropertyOptional({
-		description: 'Fecha de eliminación del producto',
-		example: '2023-01-01T00:00:00Z',
-	})
-	@IsOptional()
-	@Type(() => Date)
-	@IsDate()
-	deletedAt: Date;
+	// @ApiPropertyOptional({
+	// 	description: 'Fecha de eliminación del producto',
+	// 	example: '2023-01-01T00:00:00Z',
+	// })
+	// @IsOptional()
+	// @Type(() => Date)
+	// @IsDate()
+	// deletedAt: Date;
 }

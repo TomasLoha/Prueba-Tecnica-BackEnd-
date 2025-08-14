@@ -62,6 +62,7 @@ export class CreateFacturaDto {
 
 	@ApiProperty({
 		description: 'ID del usuario que creó la factura',
+		example: '111xxx222yyy',
 	})
 	@IsNotEmpty()
 	@IsUUID()
@@ -69,6 +70,7 @@ export class CreateFacturaDto {
 
 	@ApiProperty({
 		description: 'Detalles de la factura',
+		type: [createDetalleFacturaFFacturaDto],
 	})
 	@IsNotEmpty()
 	@ValidateNested({ each: true })

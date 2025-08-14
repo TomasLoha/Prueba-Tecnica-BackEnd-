@@ -1,7 +1,13 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
-import { IsBoolean, IsDate, IsString, Length } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+	IsBoolean,
+	IsDate,
+	IsNotEmpty,
+	IsString,
+	Length,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export class UpdateUserDto {
 	@ApiProperty({
@@ -19,6 +25,11 @@ export class UpdateUserDto {
 	@Type(() => Date)
 	@IsDate()
 	fechaNacimiento?: Date;
+
+	@ApiProperty()
+	@Transform(({ value }) => value.trim())
+	@IsString()
+	password?: string;
 
 	@ApiProperty({
 		description: 'DNI del usuario (8 caracteres)',

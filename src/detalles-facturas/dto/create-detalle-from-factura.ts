@@ -14,6 +14,7 @@ export class createDetalleFacturaFFacturaDto {
 	@IsBoolean()
 	disponible: boolean;
 
+	@IsOptional()
 	@IsNumber()
 	subtotal: number;
 

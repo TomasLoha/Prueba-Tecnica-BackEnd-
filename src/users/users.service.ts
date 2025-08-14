@@ -79,18 +79,15 @@ export class UsersService {
 	async update(id: string, updateUserDto: UpdateUserDto) {
 		// const { facturas, ...data } = updateUserDto;
 		//validar y simplificar el dni
-		const isDniUnique = await this.prisma.user.findUnique({
-			where: { dni: updateUserDto.dni },
-		});
-		if (isDniUnique) {
-			throw new Error('El DNI ya está en uso');
-		}
 
-		this.prisma.user.update({ where: { id }, data: updateUserDto });
+		return await this.prisma.user.update({
+			where: { id },
+			data: updateUserDto,
+		});
 	}
 
 	async remove(id: string) {
-		return this.prisma.product.delete({ where: { id } });
+		return this.prisma.user.delete({ where: { id } });
 	}
 
 	async hardDelete(id: string) {

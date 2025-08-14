@@ -19,16 +19,15 @@ export class PrismaService
 		super();
 
 		this.$use(async (params, next) => {
+			// Borrado lógico
 			if (params.action === 'delete') {
 				if (params.args?.hardDelete) {
 					delete params.args.hardDelete;
 					return next(params); // Borrado real
 				}
-
-				// Borrado lógico.
 				params.action = 'update';
 				params.args['data'] = {
-					deletedAt: new Date(Date.now()),
+					deletedAt: new Date(),
 					disponible: false,
 				};
 			}
@@ -36,20 +35,15 @@ export class PrismaService
 			if (params.action === 'update' && params.args?.data) {
 				const data = params.args.data;
 
-				if (
-					'deleteAt' in data &&
-					'deleteAt' != null &&
-					'disponible' in data &&
-					data.disponible === true
-				) {
+				// Si se está activando de nuevo disponible, borramos deletedAt
+				if ('disponible' in data && data.disponible === true) {
 					data.deletedAt = null;
 				}
 
-				// Si disponible es false y la fecha de borrado no está explícitamente definida,
-				// se crea una nueva fecha de borrado.
+				// Si se pone disponible = false y deletedAt no existe, creamos la fecha
 				else if ('disponible' in data && data.disponible === false) {
 					if (!('deletedAt' in data) || data.deletedAt === null) {
-						data.deletedAt = new Date(Date.now());
+						data.deletedAt = new Date();
 					}
 				}
 			}
