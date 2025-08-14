@@ -16,6 +16,7 @@ model User {
     nombreCompleto  String
     sexo            String
     estadoCivil     String
+    password        String
     deletedAt       DateTime?
     facturas        Factura[]
 }
